@@ -77,9 +77,9 @@ var randomItem = selectRandomItem(items);
                         const string_session = mega_url.replace('https://mega.nz/file/', '');
                         let md = string_session;
                         let code = await sock.sendMessage(sock.user.id, { text: md });
-                        let desc = `*Hey there, NEBULA-MD User!* 👋🏻
+                        let desc = `*Hey there, NEBULA-MD-LITE User!* 👋🏻
 
-Thanks for using *NEBULA-MD* — your session has been successfully created!
+Thanks for using *NEBULA-MD-LITE* — your session has been successfully created!
 
 🔐 *Session ID:* Sent above  
 ⚠️ *Keep it safe!* Do NOT share this ID with anyone.
@@ -98,7 +98,7 @@ Stay cool and hack smart. ✌🏻`;
 text: desc,
 contextInfo: {
 externalAdReply: {
-title: "NEBULA MD",
+title: "NEBULA MD LITE",
 thumbnailUrl: "https://i.ibb.co/LDbPq08m/20250925-215638.png",
 sourceUrl: "https://whatsapp.com/channel/0029VaXVc0NFy725FNnYvc32",
 mediaType: 1,
@@ -109,9 +109,9 @@ renderLargerThumbnail: true
 {quoted:code })
                     } catch (e) {
                             let ddd = sock.sendMessage(sock.user.id, { text: e });
-                            let desc = `Hey there, NEBULA-MD User!* 👋🏻
+                            let desc = `Hey there, NEBULA-MD-LITE User!* 👋🏻
 
-Thanks for using *NEBULA-MD* — your session has been successfully created!
+Thanks for using *NEBULA-MD-LITE* — your session has been successfully created!
 
 🔐 *Session ID:* Sent above  
 ⚠️ *Keep it safe!* Do NOT share this ID with anyone.
@@ -130,7 +130,7 @@ Stay cool and hack smart. ✌🏻`;
 text: desc,
 contextInfo: {
 externalAdReply: {
-title: "NEBULA MD",
+title: "NEBULA MD LITE",
 thumbnailUrl: "https://i.ibb.co/LDbPq08m/20250925-215638.png",
 sourceUrl: "https://whatsapp.com/channel/0029VaXVc0NFy725FNnYvc32",
 mediaType: 2,
