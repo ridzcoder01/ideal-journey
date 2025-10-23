@@ -1,190 +1,480 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="si">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="NEBULA-MD. - Streamlined QR Code and Pairing Features">
-  <meta name="author" content="NEBULA-MD.">
-  <title>NEBULA-MD - Tools</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NEBULA PAIR WEBSITE</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
-    :root {
-      --primary: #00e6b8;
-      --primary-dark: #00a97f;
-      --secondary: #1a1a2e;
-      --background: #0f0f17;
-      --card-bg: #161622;
-      --text: #f0f0f0;
-      --text-muted: #a0a0a0;
+    /* Reset & base */
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --accent:#ff4d6d;
+      --accent-2:#7bffcc;
+      --card:#0e0b0c;
+      --glass: rgba(255,255,255,0.04);
+      --muted-bg: rgba(0,0,0,0.45);
+      --radius:14px;
+      --soft: 12px;
+    }
+    html,body{height:100%}
+    body{
+      font-family:'Poppins',sans-serif;
+      background:#070204;
+      color:#fff;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px;
+      overflow:hidden;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* background video */
+    .bg-video{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:0;
+      filter: contrast(1) saturate(1.05) brightness(.45);
+      transform: scale(1.02);
+    }
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: linear-gradient(180deg, rgba(35,2,3,0.12) 0%, rgba(7,2,4,0.55) 60%);
+      z-index:1;
+      pointer-events:none;
     }
 
-    body {
+    /* neon bubbles */
+    .neon-bubbles{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      overflow:hidden;
+    }
+    .neon-bubbles span{
+      position:absolute;
+      display:block;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.22), rgba(255,255,255,0.02) 40%), linear-gradient(45deg, rgba(255,77,109,0.14), rgba(123,255,204,0.06));
+      box-shadow:0 0 18px rgba(255,77,109,0.08), 0 0 6px rgba(123,255,204,0.04) inset;
+      border-radius:50%;
+      opacity:.75;
+      transform: translateY(0) scale(1);
+      animation: drift linear infinite;
+    }
+    @keyframes drift{
+      from{ transform: translateY(0) scale(1); opacity:.9 }
+      to{ transform: translateY(-140vh) scale(.6); opacity:0.05 }
+    }
+
+    /* Logo in top left corner */
+    .logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 4px 16px rgba(255,77,109,0.06);
+      border: 2px solid rgba(255,255,255,0.04);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25));
+      overflow: hidden;
+      z-index: 10;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-      background: var(--background);
-      color: var(--text);
-      font-family: 'Poppins', sans-serif;
-      background-image: 
-        radial-gradient(circle at 25% 25%, rgba(0, 230, 184, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(0, 169, 127, 0.1) 0%, transparent 50%);
-      background-attachment: fixed;
     }
-
-    .container {
-      text-align: center;
-      padding: 2rem;
-      max-width: 800px;
-      width: 90%;
-    }
-
-    .logo {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 1.5rem;
-      filter: drop-shadow(0 0 10px rgba(0, 230, 184, 0.3));
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      margin-bottom: 2.5rem;
-      font-weight: 300;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .btn-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.2rem;
-      width: 100%;
-      margin-top: 2rem;
-    }
-
-    .btn {
-      position: relative;
-      padding: 1.2em 1.5em;
-      background: transparent;
-      border-radius: 12px;
-      border: none;
-      color: var(--text);
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      cursor: pointer;
-      overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      z-index: 1;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(5px);
-      background-color: rgba(30, 30, 40, 0.5);
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
+    .logo img {
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      z-index: -1;
-      clip-path: circle(0% at 50% 50%);
-      transition: clip-path 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+      object-fit: cover;
+      display: block;
     }
 
-    .btn:hover::before {
-      clip-path: circle(100% at 50% 50%);
+    /* centered wrapper & framing */
+    .wrap{
+      position:relative;
+      z-index:2;
+      width:min(980px, 96vw);
+      margin: 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
     }
 
-    .btn:hover {
-      color: var(--secondary);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 230, 184, 0.3);
+    .frame {
+      width:100%;
+      border-radius:20px;
+      padding:14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
-    .footer {
-      margin-top: 3rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      font-family: 'JetBrains Mono', monospace;
+    /* main card uses responsive grid */
+    .card {
+      width:100%;
+      max-width:940px;
+      border-radius:16px;
+      padding:22px;
+      display:grid;
+      grid-template-columns: 1fr 260px;
+      gap:20px;
+      align-items:start;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+      border-radius:14px;
+      position:relative;
+      overflow:visible;
+      backdrop-filter: blur(6px) saturate(1.05);
     }
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-      .subtitle {
-        font-size: 1rem;
-      }
-      .btn-grid {
+    /* content column */
+    .content{
+      padding-left:18px;
+      padding-top:8px;
+    }
+    .title{
+      font-weight:600;
+      font-size:18px;
+      letter-spacing:0.6px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .subtitle{
+      color: #ffdede;
+      font-size:13px;
+      margin-top:6px;
+      opacity:0.95;
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      margin-top:18px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .input-row{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    input[type="tel"]{
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      background:var(--glass);
+      color:#fff;
+      outline:none;
+      font-size:15px;
+      width:260px;
+      transition: box-shadow .18s ease;
+    }
+    input[type="tel"]:focus{ box-shadow: 0 6px 24px rgba(123,255,204,0.06); }
+
+    button.btn{
+      background: linear-gradient(90deg,var(--accent), #ff8aa2);
+      color:#fff;
+      border:0;
+      padding:10px 16px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      box-shadow: 0 8px 26px rgba(255,77,109,0.12);
+    }
+    button.ghost{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      padding:8px 12px;
+      border-radius:10px;
+      color:#ffdede;
+      cursor:pointer;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .status{
+      margin-left:6px;
+      color:#ffb3b3;
+      font-weight:700;
+    }
+
+    /* right column */
+    .right-col{
+      width:260px;
+      min-width:200px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+    }
+    .card-mini{
+      width:100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:12px;
+      border:1px solid rgba(255,255,255,0.03);
+      text-align:center;
+      font-size:13px;
+    }
+
+    .sound-bar{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+    }
+    .icon-btn{
+      background: rgba(255,255,255,0.03);
+      border-radius:10px;
+      padding:8px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,0.02);
+      color:#ffdede;
+    }
+
+    .hide{ transform:translateY(18px) scale(.98); opacity:0; transition:all .45s cubic-bezier(.2,.9,.2,1); }
+
+    /* small screens: stack, center everything */
+    @media (max-width:880px){
+      .card{
         grid-template-columns: 1fr;
+        gap:14px;
       }
+      .content{ padding-left:0; text-align:center; }
+      .input-row{ justify-content:center; }
+      .right-col{ width:100%; flex-direction:row; gap:8px; justify-content:center; }
+      .card-mini{ flex:1; }
+      input[type="tel"]{ width:100%; max-width:360px; }
+    }
+
+    /* very small phones */
+    @media (max-width:420px){
+      .wrap{ padding:12px; }
+      .card{ padding:16px; }
+      .logo {
+        top: 10px;
+        left: 10px;
+        width: 50px;
+        height: 50px;
+      }
+      .title{ font-size:16px; }
+      .subtitle{ font-size:13px; }
+      .card-mini{ padding:10px; font-size:12px; }
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-    </svg>
-    <h1>NEBULA-MD Tools</h1>
-    <p class="subtitle">Streamlined solutions for your digital workflow</p>
-       <p class="subtitle">Please Choose You're preferred Bot</p>
-    
-    <div class="btn-grid">
-      <button onclick="window.open('/qr', '_self')" class="btn">
-        <i class="fas fa-link"></i>NEBULA MD LITE
-      </button>
-      <button onclick="window.open('/pair', '_self')" class="btn">
-        <i class="fas fa-link"></i> NEBULA MD
-      </button>
-      <button onclick="window.open('https://github.com/ridz-coder01', '_blank')" class="btn">
-        <i class="fab fa-github"></i> GitHub
-      </button>
+  <!-- background video -->
+  <video id="bgVideo" class="bg-video" autoplay loop muted playsinline crossorigin="anonymous">
+    <source src="https://files.catbox.moe/1r8537.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+
+  <!-- Logo in top left corner -->
+  <div class="logo" title="NEBULA SESSION">
+    <img src="https://files.catbox.moe/rinv3g.jpg" alt="NEBULA SESSION">
+  </div>
+
+  <div class="neon-bubbles" id="neon-bubbles"></div>
+
+  <div class="wrap">
+    <div class="frame" role="region" aria-label="NEBULA SESSION frame">
+      <div class="card" id="mainBox" role="article">
+        <!-- left/main content -->
+        <div class="content">
+          <div class="title">
+            <div style="display:flex;align-items:center;gap:10px">
+              <strong style="font-size:18px">NEBULA SESSION</strong>
+              <span style="font-size:12px;color:#ffdede;opacity:.85;padding:6px 10px;border-radius:8px;background:linear-gradient(90deg,rgba(255,77,109,0.06),rgba(123,255,204,0.03));border:1px solid rgba(255,255,255,0.02)">Nebula • Bot</span>
+            </div>
+          </div>
+
+          <div class="subtitle">Enter a phone number to request a verification code or join our channel. Works smoothly on phones and desktop.</div>
+
+          <div class="controls" aria-hidden="false">
+            <div class="input-row" role="group" aria-label="Number input and actions">
+              <input id="number" type="tel" placeholder="Enter phone number (e.g. +12345678901)" inputmode="tel" autocomplete="tel" />
+              <button id="submit" class="btn" title="Request code" aria-label="Send request"><i class="fas fa-paper-plane"></i> <span class="vis">Send</span></button>
+              <button id="clearBtn" class="ghost" title="Clear" aria-label="Clear input"><i class="fas fa-eraser"></i></button>
+            </div>
+            <div id="pair" class="status" aria-live="polite" style="margin-left:6px"></div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; align-items:center; justify-content:flex-start;">
+            <button id="joinBtn" class="ghost" title="Join channel" aria-label="Join channel"><i class="fab fa-whatsapp"></i> Join Channel</button>
+
+            <div class="sound-bar" style="margin-left:6px">
+              <div id="soundToggle" class="icon-btn" role="button" aria-pressed="false" aria-label="Toggle video sound" title="Toggle sound (video)">
+                <i id="soundIcon" class="fas fa-volume-mute" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- right column -->
+        <aside class="right-col" aria-label="Quick information">
+          <div class="card-mini" role="status" aria-live="polite">
+            <div style="font-size:13px;font-weight:600">Status</div>
+            <div style="margin-top:6px;color:#ffdede" id="statusText">Ready</div>
+          </div>
+
+          <div class="card-mini">
+            <div style="font-size:13px;font-weight:600">Quick Actions</div>
+            <div style="margin-top:8px;display:flex;gap:8px;justify-content:center">
+              <button id="copyBtn" class="ghost" title="Copy channel link" aria-label="Copy channel link"><i class="fas fa-link"></i></button>
+              <button id="openBtn" class="ghost" title="Open channel" aria-label="Open channel"><i class="fas fa-external-link-alt"></i></button>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
-    
-    <p class="footer">© 2025 ridz coder Inc.  All rights reserved.</p>
   </div>
 
   <script>
-    // Smooth hover effect enhancement
-    document.querySelectorAll('.btn').forEach(btn => {
-      btn.addEventListener('mousemove', (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        btn.style.setProperty('--mouse-x', `${x}px`);
-        btn.style.setProperty('--mouse-y', `${y}px`);
-      });
+    // generate neon bubbles
+    const container = document.getElementById('neon-bubbles');
+    for (let i=0;i<36;i++){
+      const s=document.createElement('span');
+      const size = 8 + Math.random()*26;
+      s.style.left = Math.random()*100 + 'vw';
+      s.style.bottom = (Math.random()*20 - 10) + 'vh';
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.animationDuration = (8 + Math.random()*8) + 's';
+      s.style.animationDelay = (Math.random()*6) + 's';
+      s.style.opacity = 0.6 + Math.random()*0.4;
+      container.appendChild(s);
+    }
+
+    // elements & actions
+    const pair = document.getElementById('pair');
+    const submit = document.getElementById('submit');
+    const num = document.getElementById('number');
+    const clearBtn = document.getElementById('clearBtn');
+    const joinBtn = document.getElementById('joinBtn');
+    const mainBox = document.getElementById('mainBox');
+    const statusText = document.getElementById('statusText');
+    const channelURL = "https://whatsapp.com/channel/0029VbBATdIJJhzOXep1c31K";
+    const copyBtn = document.getElementById('copyBtn');
+    const openBtn = document.getElementById('openBtn');
+
+    // sound
+    const bgVideo = document.getElementById('bgVideo');
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+
+    // Submit / fetch code
+    submit.addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (!num.value || num.value.replace(/[^0-9]/g,'').length < 11) {
+        pair.innerHTML = '<span style="color:#ffb3b3;font-weight:700">Invalid or missing number</span>';
+        statusText.innerText = 'Invalid input';
+        return;
+      }
+      const number = num.value.replace(/[^0-9]/g,'');
+      num.value = '+' + number;
+      num.style.background = '#120000';
+      pair.innerHTML = '<span style="color:#ffdede;font-weight:700">Please wait...</span>';
+      statusText.innerText = 'Requesting code...';
+
+      try {
+        let res = await fetch(`/code?number=${number}`);
+        let data = await res.json();
+        let code = data.code || 'Service Unavailable';
+        pair.innerHTML = `<div id="copy" style="color:#ffb3b3;font-weight:700;cursor:pointer" onclick="copyCode()"><strong>CODE:</strong> <span style="color:#fff">${code}</span></div>`;
+        statusText.innerText = 'Code received';
+      } catch (err) {
+        pair.innerHTML = '<span style="color:orangered;font-weight:700">Error fetching code</span>';
+        statusText.innerText = 'Error';
+      }
+    });
+
+    function copyCode(){
+      const el = document.getElementById('copy');
+      if (!el) return;
+      const txt = el.innerText.replace('CODE:','').trim();
+      navigator.clipboard?.writeText(txt).then(()=>{
+        const old = el.innerHTML;
+        el.innerHTML = '<strong style="color:lime">COPIED</strong>';
+        setTimeout(()=> el.innerHTML = old,700);
+      }).catch(()=>{});
+    }
+    window.copyCode = copyCode;
+
+    // clear
+    clearBtn.addEventListener('click', ()=> {
+      num.value=''; pair.innerHTML=''; num.type='tel'; num.style.background='';
+      statusText.innerText = 'Cleared';
+    });
+
+    // join
+    joinBtn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      mainBox.classList.add('hide');
+      statusText.innerText = 'Opening channel...';
+      setTimeout(()=> {
+        const opened = window.open(channelURL, '_blank', 'noopener,noreferrer');
+        if (!opened) window.location.href = channelURL;
+      }, 420);
+    });
+
+    // quick actions
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(channelURL);
+        statusText.innerText = 'Channel link copied';
+      } catch {
+        statusText.innerText = 'Could not copy';
+      }
+    });
+    openBtn.addEventListener('click', ()=> {
+      window.open(channelURL, '_blank', 'noopener,noreferrer');
+    });
+
+    // Enter to submit
+    num.addEventListener('keydown', (e)=> {
+      if (e.key === 'Enter') submit.click();
+    });
+
+    // Toggle video sound
+    soundToggle.addEventListener('click', async () => {
+      const isMuted = bgVideo.muted;
+      bgVideo.muted = !isMuted;
+      soundIcon.classList.toggle('fa-volume-mute', bgVideo.muted);
+      soundIcon.classList.toggle('fa-volume-up', !bgVideo.muted);
+      soundToggle.setAttribute('aria-pressed', String(!bgVideo.muted));
+      statusText.innerText = bgVideo.muted ? 'Video muted' : 'Video unmuted';
+    });
+
+    // initial ready
+    window.addEventListener('load', ()=> {
+      statusText.innerText = 'Ready';
     });
   </script>
+
 </body>
-</html>
+  </html>
